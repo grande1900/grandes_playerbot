@@ -1,5 +1,6 @@
 AddCSLuaFile()
 CreateConVar("grandes_playerbot_ff",1,FCVAR_NONE,"Determines whether the bots kill each other or not")
+CreateConVar("grandes_playerbot_ignoreplayers",0,FCVAR_NONE,"Determines whether the bots ignore real players or not")
 MidLongWep,MidWep,CQCWep,LongWep,MeleeWep = CreateConVar("grandes_playerbot_midlong_weapon","weapon_crossbow",FCVAR_NONE,""),CreateConVar("grandes_playerbot_mid_weapon","weapon_ar2",FCVAR_NONE,""),CreateConVar("grandes_playerbot_cqc_weapon","weapon_shotgun",FCVAR_NONE,""),CreateConVar("grandes_playerbot_long_weapon","weapon_rpg",FCVAR_NONE,""),CreateConVar("grandes_playerbot_melee_weapon","weapon_crowbar",FCVAR_NONE,"")
 SpawnSpread = CreateConVar("grandes_playerbot_spread",256,FCVAR_NONE,"Spawn area for playerbots")
 ENT.Type = "anim"
@@ -81,7 +82,7 @@ hook.Add( "PlayerSpawn", "GRANDES_SHITPACK_PLAYERBOT_RESPAWN_GIVE",function( vic
 	end
 end)
 hook.Add( "EntityTakeDamage", "GRANDES_SHITPACK_PLAYERBOT_REGURGITATE", function( victim, dmginfo )
-	if victim.GrandesPlayerbot and !dmginfo:GetAttacker():IsWorld() and (!GetConVar("ai_ignoreplayers"):GetBool() or (dmginfo:GetAttacker().GrandesPlayerbot and GetConVar("grandes_playerbot_ff"):GetBool())) and dmginfo:GetAttacker()~=victim then victim.CustomEnemy = dmginfo:GetAttacker() end
+	if victim.GrandesPlayerbot and !dmginfo:GetAttacker():IsWorld() and (!GetConVar("grandes_playerbot_ignoreplayers"):GetBool() or (dmginfo:GetAttacker().GrandesPlayerbot and GetConVar("grandes_playerbot_ff"):GetBool())) and dmginfo:GetAttacker()~=victim then victim.CustomEnemy = dmginfo:GetAttacker() end
 end)
 hook.Add( "StartCommand", "GRANDES_SHITPACK_PLAYERBOT_FUNCTION", function( ply, cmd )
 
@@ -107,7 +108,7 @@ hook.Add( "StartCommand", "GRANDES_SHITPACK_PLAYERBOT_FUNCTION", function( ply, 
 		for id, pl in ipairs( ents.FindInSphere(ply:GetPos(),4096 ) ) do
 			if (pl==ply) or (pl==blacklist) or (pl:GetOwner()==ply) then continue end -- Don't select dead players or self as enemies 
 			if pl:IsNPC() then ply.CustomEnemy = pl
-			elseif (pl:IsPlayer() and !pl.GrandesPlayerbot and !GetConVar("ai_ignoreplayers"):GetBool()) then ply.CustomEnemy = pl
+			elseif (pl:IsPlayer() and !pl.GrandesPlayerbot and !GetConVar("grandes_playerbot_ignoreplayers"):GetBool()) then ply.CustomEnemy = pl
 			elseif (pl:IsPlayer() and pl.GrandesPlayerbot and GetConVar("grandes_playerbot_ff"):GetBool() ) then ply.CustomEnemy = pl else continue end
 		end
 			if ( !IsValid( ply.CustomEnemy ) ) then return end
