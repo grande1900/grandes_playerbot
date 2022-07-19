@@ -185,6 +185,7 @@ hook.Add( "PopulateToolMenu", "GRANDES_BOT_SETTINGS", function()
 		panel:TextEntry( "Midrange weapon", "grandes_playerbot_mid_weapon" )
 		panel:TextEntry( "Longrange weapon", "grandes_playerbot_midlong_weapon" )
 		panel:TextEntry( "Longer-range weapon", "grandes_playerbot_long_weapon" )
+		panel:NumSlider( "Random spawn area", "grandes_playerbot_spread", 0, 2048  )
 		-- Add stuff here
 	end )
 end )
